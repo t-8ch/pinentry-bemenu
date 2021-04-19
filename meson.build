@@ -17,8 +17,6 @@ conf_data.set('HAS_BM_MENU_SET_PASSWORD', has_bm_menu_set_password)
 
 configure_file(configuration: conf_data, output : 'config.h')
 
-exe = executable('pinentry_bemenu', 'pinentry_bemenu.c',
+exe = executable('pinentry-bemenu', 'pinentry_bemenu.c',
   dependencies : [bemenu, assuan, gpg_error],
   install : true)
-
-test('basic', exe)
