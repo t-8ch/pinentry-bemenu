@@ -296,5 +296,10 @@ int main(int argc, char **argv) {
 		GPG_NO_ERROR_OR_RETURN_ERRNO(r);
 	}
 
+	free(buttons.ok);
+	free(buttons.cancel);
+	free(buttons.not_ok);
+	assuan_release(ctx);
+
 	return EXIT_SUCCESS;
 }
