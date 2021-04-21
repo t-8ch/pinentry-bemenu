@@ -1,5 +1,5 @@
 project('pinentry-bemenu', 'c',
-  version : '0.1',
+  version : '0.4.0',
   default_options : ['warning_level=3', 'c_std=c11'])
 
 compiler = meson.get_compiler('c')
