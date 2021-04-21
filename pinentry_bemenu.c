@@ -222,6 +222,12 @@ static gpg_error_t option_handler (assuan_context_t ctx, const char *name, const
 
 	if (strcmp(name, "no-grab") == 0)
 		; // we always grab
+	else if (strcmp(name, "ttyname") == 0)
+		;
+	else if (strcmp(name, "ttytype") == 0)
+		;
+	else if (strncmp(name, "lc-", 3) == 0)
+		;
 	else
 		return gpg_error(GPG_ERR_UNKNOWN_OPTION);;
 
