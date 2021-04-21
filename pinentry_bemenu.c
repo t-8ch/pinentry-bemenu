@@ -205,6 +205,11 @@ static void unescape_inplace(char *data) {
 				l -= 2;
 			}
 		}
+		// remove all keyboard accelerators, bemenu is keyboard-driven
+		// anyways
+		if (c == '_')
+			memmove(&data[i], &data[i+1], l - i - 1);
+
 	}
 	data[l] = '\0';
 }
