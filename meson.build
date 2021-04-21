@@ -14,6 +14,8 @@ has_bm_menu_set_password = compiler.has_function('bm_menu_set_password',
   dependencies : [bemenu])
 
 conf_data.set('HAS_BM_MENU_SET_PASSWORD', has_bm_menu_set_password)
+conf_data.set_quoted('PROJECT_NAME', meson.project_name())
+conf_data.set_quoted('PROJECT_VERSION', meson.project_version())
 
 configure_file(configuration: conf_data, output : 'config.h')
 

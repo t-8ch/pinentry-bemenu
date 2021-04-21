@@ -275,6 +275,8 @@ int main(int argc, char **argv) {
 	assuan_fd_t out_fd = assuan_fdopen(STDOUT_FILENO);
 	assuan_fd_t fds[] = { in_fd, out_fd };
 
+	assuan_set_hello_line(ctx, PROJECT_NAME " v" PROJECT_VERSION);
+
 	r = assuan_init_pipe_server(ctx, fds);
 	GPG_NO_ERROR_OR_RETURN_ERRNO(r);
 
