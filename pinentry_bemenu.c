@@ -89,10 +89,15 @@ static gpg_error_t get_pin(assuan_context_t ctx, char *message) {
 		ret = gpg_error(GPG_ERR_ASS_CANCELED);
 	} else {
 		const char *pin = bm_item_get_text(selected);
-		if (pin)
+		if (pin) {
+			assuan_begin_confidential(ctx);
 			ret = assuan_send_data(ctx, pin, strlen(pin));
-		else
+			// flush data to force confidential logging
+			assuan_send_data(ctx, NULL, 0);
+			assuan_end_confidential(ctx);
+		} else {
 			ret = GPG_ERR_NO_ERROR;
+		}
 	}
 
 	bm_menu_free(menu);
