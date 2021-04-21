@@ -10,6 +10,7 @@
 #include <bemenu.h>
 
 #include "config.h"
+#include "options.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
@@ -48,6 +49,7 @@ static gpg_error_t set_not_ok(assuan_context_t ctx, char *message) {
 static struct bm_item *run_menu(struct bm_menu *menu) {
 	assert(menu);
 
+	apply_options(menu);
 	bm_menu_grab_keyboard(menu, true);
 	bm_menu_set_prefix(menu, prompt);
 	bm_menu_set_title(menu, desc);
@@ -220,6 +222,8 @@ static gpg_error_t option_handler (assuan_context_t ctx, const char *name, const
 	(void) ctx;
 	(void) value;
 
+	fprintf(stderr, "OPTION: %s=%s\n", name, value);
+
 	if (strcmp(name, "no-grab") == 0)
 		; // we always grab
 	else if (strcmp(name, "ttyname") == 0)
@@ -260,16 +264,19 @@ static struct {
 	if (r) return gpg_err_code_to_errno(gpg_err_code(err))
 
 
-int main(int argc, char **argv) {
+int main(int argc, const char **argv) {
 	(void) argc;
 	(void) argv;
 
 	if (!bm_init())
 		return EXIT_FAILURE;
 
+
 	buttons.ok = strdup("OK");
 	buttons.cancel = strdup("Cancel");
 	buttons.not_ok = strdup("Not OK");
+
+	parse_options(argc, argv);
 
 	gpg_error_t r;
 	assuan_context_t ctx;
@@ -289,7 +296,8 @@ int main(int argc, char **argv) {
 	r = assuan_register_option_handler(ctx, &option_handler);
 	GPG_NO_ERROR_OR_RETURN_ERRNO(r);
 
-	// assuan_set_log_stream(ctx, stderr);
+	if (is_debug())
+		assuan_set_log_stream(ctx, stderr);
 
 	for (int i = 0; i < (int) ARRAY_SIZE(commands); i++) {
 		r = assuan_register_command(ctx,
@@ -312,6 +320,7 @@ int main(int argc, char **argv) {
 	free(buttons.ok);
 	free(buttons.cancel);
 	free(buttons.not_ok);
+	free_options();
 	assuan_release(ctx);
 
 	return EXIT_SUCCESS;

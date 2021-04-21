@@ -7,6 +7,7 @@ compiler = meson.get_compiler('c')
 bemenu = dependency('bemenu')
 assuan = dependency('libassuan')
 gpg_error = dependency('gpg-error')
+popt = dependency('popt')
 
 conf_data = configuration_data()
 
@@ -19,6 +20,6 @@ conf_data.set_quoted('PROJECT_VERSION', meson.project_version())
 
 configure_file(configuration: conf_data, output : 'config.h')
 
-exe = executable('pinentry-bemenu', 'pinentry_bemenu.c',
-  dependencies : [bemenu, assuan, gpg_error],
+exe = executable('pinentry-bemenu', 'pinentry_bemenu.c', 'options.c',
+  dependencies : [bemenu, assuan, gpg_error, popt],
   install : true)
