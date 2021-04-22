@@ -45,11 +45,7 @@ static struct poptOption optionsTable[] = {
 	POPT_TABLEEND
 };
 
-void parse_options(int argc, const char **argv) {
-	poptContext ctx = poptGetContext(NULL, argc, argv, optionsTable, 0);
-
-	int rc = poptGetNextOpt(ctx);
-
+void validate_option_parsing(int rc, poptContext ctx) {
 	if (rc != -1) {
 		fprintf(stderr, "%s: %s\n",
 				poptBadOption(ctx, POPT_BADOPTION_NOALIAS),
@@ -57,6 +53,33 @@ void parse_options(int argc, const char **argv) {
 		poptPrintUsage(ctx, stderr, 0);
 		exit(1);
 	}
+}
+
+void parse_environment_options(void) {
+	const char *opts = getenv("BEMENU_OPTS");
+
+	if (!opts)
+		return;
+
+	int env_argc;
+	const char **env_argv;
+	int rc = poptParseArgvString(opts, &env_argc, &env_argv);
+	poptContext ctx = poptGetContext(NULL,
+			env_argc, env_argv,
+			optionsTable, POPT_CONTEXT_KEEP_FIRST);
+	rc = poptGetNextOpt(ctx);
+	validate_option_parsing(rc, ctx);
+	poptFreeContext(ctx);
+	free(env_argv);
+}
+
+void parse_options(int argc, const char **argv) {
+	parse_environment_options();
+
+	poptContext ctx = poptGetContext(NULL, argc, argv, optionsTable, 0);
+
+	int rc = poptGetNextOpt(ctx);
+	validate_option_parsing(rc, ctx);
 
 	poptFreeContext(ctx);
 }
