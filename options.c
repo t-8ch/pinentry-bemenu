@@ -84,14 +84,14 @@ void parse_options(int argc, const char **argv) {
 	poptFreeContext(ctx);
 }
 
-void free_options() {
+void free_options(void) {
 	free(font);
 #define X(option, help, var, setting) free(var);
 	COLORS
 #undef X
 }
 
-bool is_debug() {
+bool is_debug(void) {
 	return debug;
 }
 
