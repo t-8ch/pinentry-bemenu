@@ -58,7 +58,7 @@ void validate_option_parsing(int rc, poptContext ctx) {
 void parse_environment_options(void) {
 	const char *opts = getenv("BEMENU_OPTS");
 
-	if (!opts)
+	if (!opts || !opts[0])
 		return;
 
 	int env_argc;
