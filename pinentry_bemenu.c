@@ -227,8 +227,6 @@ static gpg_error_t option_handler (assuan_context_t ctx, const char *name, const
 	(void) ctx;
 	(void) value;
 
-	fprintf(stderr, "OPTION: %s=%s\n", name, value);
-
 	if (strcmp(name, "no-grab") == 0)
 		; // we always grab
 	else if (strcmp(name, "ttyname") == 0)
