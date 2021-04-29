@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 200809L
+#define _GNU_SOURCE
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -46,13 +46,33 @@ static gpg_error_t set_not_ok(assuan_context_t ctx, char *message) {
 	return GPG_ERR_NO_ERROR;
 }
 
+static char *make_title(bool *free_prompt) {
+	char *p;
+	int r;
+
+	r = asprintf(&p, "%s | %s", desc, prompt);
+	if (r == -1) {
+		*free_prompt = false;
+		return prompt;
+	} else {
+		*free_prompt = true;
+		return p;
+	}
+}
+
 static struct bm_item *run_menu(struct bm_menu *menu) {
 	assert(menu);
 
+	char *title;
+	bool free_title;
+
 	apply_options(menu);
 	bm_menu_grab_keyboard(menu, true);
-	bm_menu_set_prefix(menu, prompt);
-	bm_menu_set_title(menu, desc);
+
+	title = make_title(&free_title);
+	bm_menu_set_title(menu, title);
+	if (free_title)
+		free(title);
 	bm_menu_set_filter_mode(menu, BM_FILTER_MODE_DMENU_CASE_INSENSITIVE);
 #ifdef HAS_BM_MENU_SET_PASSWORD
 	bm_menu_set_password(menu, true);
