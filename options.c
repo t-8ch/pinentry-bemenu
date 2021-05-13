@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,6 +28,7 @@ static int no_overlap;
 static int monitor;
 static int height;
 static char *font;
+static char *display;
 #define X(option, help, var, setting) static char *var;
 COLORS
 #undef X
@@ -37,6 +40,7 @@ static struct poptOption optionsTable[] = {
 	{ "monitor", 'm', POPT_ARG_INT, &monitor, 0, "Monitor", NULL },
 	{ "line-height", 'H', POPT_ARG_INT, &height, 0, "Height for each menu line", NULL },
 	{ "fn", '\0', POPT_ARG_STRING, &font, 0, "Font", NULL },
+	{ "display", 'D', POPT_ARG_STRING, &display, 0, "Set the X display", NULL },
 #define X(option, help, var, setting) \
 	{ option, '\0', POPT_ARG_STRING, &var, 0, help, "#RRGGBB" },
 	COLORS
@@ -93,6 +97,12 @@ void free_options(void) {
 
 bool is_debug(void) {
 	return debug;
+}
+
+void apply_global_options() {
+	if (display) {
+		setenv("DISPLAY", display, 1);
+	}
 }
 
 void apply_options(struct bm_menu *menu) {

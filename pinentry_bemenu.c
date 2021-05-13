@@ -322,6 +322,8 @@ int main(int argc, const char **argv) {
 	if (is_debug())
 		assuan_set_log_stream(ctx, stderr);
 
+	apply_global_options();
+
 	for (int i = 0; i < (int) ARRAY_SIZE(commands); i++) {
 		r = assuan_register_command(ctx,
 				commands[i].command,
