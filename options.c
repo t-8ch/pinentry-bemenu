@@ -7,6 +7,7 @@
 #include <popt.h>
 
 #include "options.h"
+#include "config.h"
 
 #define COLORS \
 	X("tb", "Title background color", title_background_color, BM_COLOR_TITLE_BG) \
@@ -51,11 +52,9 @@ static struct poptOption optionsTable[] = {
 
 void validate_option_parsing(int rc, poptContext ctx) {
 	if (rc != -1) {
-		fprintf(stderr, "%s: %s\n",
+		fprintf(stderr, PROJECT_NAME " %s: %s\n",
 				poptBadOption(ctx, POPT_BADOPTION_NOALIAS),
 				poptStrerror(rc));
-		poptPrintUsage(ctx, stderr, 0);
-		exit(1);
 	}
 }
 
