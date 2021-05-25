@@ -74,9 +74,7 @@ static struct bm_item *run_menu(struct bm_menu *menu) {
 	if (free_title)
 		free(title);
 	bm_menu_set_filter_mode(menu, BM_FILTER_MODE_DMENU_CASE_INSENSITIVE);
-#ifdef HAS_BM_MENU_SET_PASSWORD
 	bm_menu_set_password(menu, true);
-#endif
 
 	uint32_t unicode;
 	enum bm_key key;

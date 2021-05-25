@@ -4,17 +4,13 @@ project('pinentry-bemenu', 'c',
 
 compiler = meson.get_compiler('c')
 
-bemenu = dependency('bemenu')
+bemenu = dependency('bemenu', version : '>= 0.6.0')
 assuan = dependency('libassuan')
 gpg_error = dependency('gpg-error')
 popt = dependency('popt')
 
 conf_data = configuration_data()
 
-has_bm_menu_set_password = compiler.has_function('bm_menu_set_password',
-  dependencies : [bemenu])
-
-conf_data.set('HAS_BM_MENU_SET_PASSWORD', has_bm_menu_set_password)
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
 conf_data.set_quoted('PROJECT_VERSION', meson.project_version())
 
