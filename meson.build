@@ -1,6 +1,12 @@
 project('pinentry-bemenu', 'c',
-  version : '0.7.0',
   default_options : ['warning_level=3', 'c_std=c11'])
+
+
+vcs_tag(
+  input : 'version.h.in',
+  output : 'version.h',
+  command : ['git', 'describe', '--tag', '--dirty', '--broken'],
+)
 
 compiler = meson.get_compiler('c')
 
@@ -18,7 +24,6 @@ have_bemenu_set_bottom = compiler.has_function(
 conf_data = configuration_data()
 
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
-conf_data.set_quoted('PROJECT_VERSION', meson.project_version())
 conf_data.set10('HAVE_BEMENU_SET_BOTTOM', have_bemenu_set_bottom)
 
 configure_file(configuration: conf_data, output : 'config.h')
