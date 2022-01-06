@@ -164,10 +164,14 @@ static gpg_error_t confirm(assuan_context_t ctx, char *message) {
 
 	struct bm_item *ok = bm_item_new(buttons.ok);
 	assert(ok);
+	struct bm_item *not_ok = bm_item_new(buttons.not_ok);
+	assert(not_ok);
 	struct bm_item *cancel = bm_item_new(buttons.cancel);
 	assert(cancel);
 
 	b = bm_menu_add_item(menu, ok);
+	assert(b);
+	b = bm_menu_add_item(menu, not_ok);
 	assert(b);
 	b = bm_menu_add_item(menu, cancel);
 	assert(b);
@@ -176,6 +180,8 @@ static gpg_error_t confirm(assuan_context_t ctx, char *message) {
 	if (selected) {
 		if (selected == ok)
 			ret = GPG_ERR_NO_ERROR;
+		else if (selected == not_ok)
+			ret = GPG_ERR_NOT_CONFIRMED;
 		else if (selected == cancel)
 			ret = gpg_error(GPG_ERR_ASS_CANCELED);
 		else
