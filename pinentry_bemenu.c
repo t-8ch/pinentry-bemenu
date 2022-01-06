@@ -47,33 +47,36 @@ static gpg_error_t set_not_ok(assuan_context_t ctx, char *message) {
 	return GPG_ERR_NO_ERROR;
 }
 
-static char *make_title(bool *free_prompt) {
-	char *p;
-	int r;
+static char *make_title(void) {
 
-	r = asprintf(&p, "%s | %s", desc, prompt);
-	if (r == -1) {
-		*free_prompt = false;
-		return prompt;
-	} else {
-		*free_prompt = true;
-		return p;
-	}
+	if (!desc && !prompt)
+		return NULL;
+
+	if (!desc)
+		return strdup(prompt);
+
+	if (!prompt)
+		return strdup(desc);
+
+	char *p;
+	int r = asprintf(&p, "%s | %s", desc, prompt);
+	if (r == -1)
+		return NULL;
+
+	return p;
 }
 
 static struct bm_item *run_menu(struct bm_menu *menu) {
 	assert(menu);
 
 	char *title;
-	bool free_title;
 
 	apply_options(menu);
 	bm_menu_grab_keyboard(menu, true);
 
-	title = make_title(&free_title);
+	title = make_title();
 	bm_menu_set_title(menu, title);
-	if (free_title)
-		free(title);
+	free(title);
 	bm_menu_set_filter_mode(menu, BM_FILTER_MODE_DMENU_CASE_INSENSITIVE);
 	bm_menu_set_password(menu, true);
 
