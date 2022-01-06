@@ -285,6 +285,33 @@ static struct {
 	{"SETNOTOK", &set_not_ok},
 };
 
+static void reset(void) {
+	free(buttons.ok);
+	buttons.ok = strdup("OK");
+
+	free(buttons.cancel);
+	buttons.cancel = strdup("Cancel");
+
+	free(buttons.not_ok);
+	buttons.not_ok = strdup("Not OK");
+
+	free(desc);
+	desc = NULL;
+
+	free(prompt);
+	prompt = NULL;
+}
+
+static gpg_error_t reset_notify(assuan_context_t ctx, char *message) {
+	(void) ctx;
+	(void) message;
+
+	reset();
+
+	return GPG_ERR_NO_ERROR;
+}
+
+
 #define GPG_NO_ERROR_OR_RETURN_ERRNO(err) \
 	if (r) return gpg_err_code_to_errno(gpg_err_code(err))
 
@@ -296,10 +323,7 @@ int main(int argc, const char **argv) {
 	if (!bm_init())
 		return EXIT_FAILURE;
 
-
-	buttons.ok = strdup("OK");
-	buttons.cancel = strdup("Cancel");
-	buttons.not_ok = strdup("Not OK");
+	reset();
 
 	parse_options(argc, argv);
 
@@ -319,6 +343,9 @@ int main(int argc, const char **argv) {
 	GPG_NO_ERROR_OR_RETURN_ERRNO(r);
 
 	r = assuan_register_option_handler(ctx, &option_handler);
+	GPG_NO_ERROR_OR_RETURN_ERRNO(r);
+
+	r = assuan_register_reset_notify(ctx, &reset_notify);
 	GPG_NO_ERROR_OR_RETURN_ERRNO(r);
 
 	if (is_debug())
