@@ -2,7 +2,7 @@ project('pinentry-bemenu', 'c',
   default_options : ['warning_level=3', 'c_std=c11'])
 
 
-vcs_tag(
+version_h = vcs_tag(
   input : 'version.h.in',
   output : 'version.h',
   command : ['git', 'describe', '--tag', '--dirty', '--broken'],
@@ -29,5 +29,6 @@ conf_data.set10('HAVE_BEMENU_SET_BOTTOM', have_bemenu_set_bottom)
 configure_file(configuration: conf_data, output : 'config.h')
 
 exe = executable('pinentry-bemenu', 'pinentry_bemenu.c', 'options.c',
+  version_h,
   dependencies : [bemenu, assuan, gpg_error, popt],
   install : true)
