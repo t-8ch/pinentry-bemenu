@@ -24,3 +24,7 @@ meson compile -C build
 ```
 meson install -C build
 ```
+
+## Screenshot
+
+![Screenshot of pinentry-bemenu](./screenshot.png?raw=true)
