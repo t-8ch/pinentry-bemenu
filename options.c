@@ -32,6 +32,9 @@ static int monitor;
 static int height;
 static char *font;
 static char *display;
+static int ignore_case;
+static int list = 3;
+static int wrap;
 #define X(option, help, var, setting) static char *var;
 COLORS
 #undef X
@@ -46,6 +49,9 @@ static struct poptOption optionsTable[] = {
 	{ "line-height", 'H', POPT_ARG_INT, &height, 0, "Height for each menu line", NULL },
 	{ "fn", '\0', POPT_ARG_STRING, &font, 0, "Font", NULL },
 	{ "display", 'D', POPT_ARG_STRING, &display, 0, "Set the X display", NULL },
+	{ "ignorecase", 'i', POPT_ARG_NONE, &ignore_case, 0, "Match items case insensitively", NULL },
+	{ "list", 'l', POPT_ARG_INT, &list, 0, "List items vertically with the given number of lines", NULL },
+	{ "wrap", 'w', POPT_ARG_NONE, &wrap, 0, "Wraps cursor selection", NULL },
 #define X(option, help, var, setting) \
 	{ option, '\0', POPT_ARG_STRING, &var, 0, help, "#RRGGBB" },
 	COLORS
@@ -118,6 +124,11 @@ void apply_options(struct bm_menu *menu) {
 	bm_menu_set_monitor(menu, monitor);
 	bm_menu_set_line_height(menu, height);
 	bm_menu_set_font(menu, font);
+	if (ignore_case) {
+		bm_menu_set_filter_mode(menu, BM_FILTER_MODE_DMENU_CASE_INSENSITIVE);
+	}
+	bm_menu_set_lines(menu, list);
+	bm_menu_set_wrap(menu, wrap);
 #define X(option, help, var, setting) \
 	if (var) \
 		bm_menu_set_color(menu, setting, var);

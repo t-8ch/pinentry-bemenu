@@ -77,9 +77,7 @@ static struct bm_item *run_menu(struct bm_menu *menu) {
 	title = make_title();
 	bm_menu_set_title(menu, title);
 	free(title);
-	bm_menu_set_filter_mode(menu, BM_FILTER_MODE_DMENU_CASE_INSENSITIVE);
 	bm_menu_set_password(menu, true);
-	bm_menu_set_lines(menu, 3);
 
 	uint32_t unicode;
 	enum bm_key key;
