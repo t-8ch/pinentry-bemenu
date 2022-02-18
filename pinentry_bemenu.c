@@ -176,16 +176,17 @@ static gpg_error_t confirm(assuan_context_t ctx, char *message) {
 	assert(b);
 
 	struct bm_item *selected = run_menu(menu);
-	if (selected) {
-		if (selected == ok)
-			ret = GPG_ERR_NO_ERROR;
-		else if (selected == not_ok)
-			ret = GPG_ERR_NOT_CONFIRMED;
-		else if (selected == cancel)
-			ret = gpg_error(GPG_ERR_ASS_CANCELED);
-		else
-			assert(false);
+
+	if (!selected) {
+		ret = gpg_error(GPG_ERR_ASS_CANCELED);
+	} else if (selected == ok) {
+		ret = GPG_ERR_NO_ERROR;
+	} else if (selected == not_ok) {
+		ret = GPG_ERR_NOT_CONFIRMED;
+	} else if (selected == cancel) {
+		ret = gpg_error(GPG_ERR_ASS_CANCELED);
 	} else {
+		bm_item_free(selected);
 		ret = gpg_error(GPG_ERR_ASS_CANCELED);
 	}
 
