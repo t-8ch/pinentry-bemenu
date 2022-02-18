@@ -1,5 +1,7 @@
 project('pinentry-bemenu', 'c',
-  default_options : ['warning_level=3', 'c_std=c11'])
+  default_options : ['warning_level=3', 'c_std=c11'],
+  version : '0.9.0',
+)
 
 
 version_h = vcs_tag(
