@@ -12,7 +12,7 @@ version_h = vcs_tag(
 
 compiler = meson.get_compiler('c')
 
-bemenu = dependency('bemenu', version : '>= 0.6.0')
+bemenu = dependency('bemenu', version : '>= 0.6.5')
 assuan = dependency('libassuan')
 gpg_error = dependency('gpg-error')
 popt = dependency('popt')
@@ -26,7 +26,6 @@ have_bemenu_set_bottom = compiler.has_function(
 conf_data = configuration_data()
 
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
-conf_data.set10('HAVE_BEMENU_SET_BOTTOM', have_bemenu_set_bottom)
 
 configure_file(configuration: conf_data, output : 'config.h')
 
