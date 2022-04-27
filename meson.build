@@ -1,6 +1,6 @@
 project('pinentry-bemenu', 'c',
   default_options : ['warning_level=3', 'c_std=c11'],
-  version : '0.10.0',
+  version : '0.11.0',
 )
 
 

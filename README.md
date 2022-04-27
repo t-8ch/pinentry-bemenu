@@ -25,6 +25,13 @@ meson compile -C build
 meson install -C build
 ```
 
+## Exit codes
+
+```
+| 0| Normal exit. communication via the assuan protocol                            |
+|15| Could not initialize bemenu library. Users should try another pinentry program|
+```
+
 ## Screenshot
 
 ![Screenshot of pinentry-bemenu](./screenshot.png?raw=true)

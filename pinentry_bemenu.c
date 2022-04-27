@@ -14,6 +14,7 @@
 #include "options.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+#define EXIT_FAILURE_BEMENU 13
 
 static char *prompt, *desc;
 
@@ -109,7 +110,7 @@ static gpg_error_t get_pin(assuan_context_t ctx, char *message) {
 
 	struct bm_menu *menu = bm_menu_new(NULL);
 	if (!menu)
-		return gpg_error(GPG_ERR_ENOMEM);
+		return gpg_error(GPG_ERR_ASSUAN_SERVER_FAULT);
 
 	struct bm_item *selected = run_menu(menu);
 	if (!selected) {
@@ -137,6 +138,8 @@ static gpg_error_t message(assuan_context_t ctx, char *message) {
 
 	gpg_error_t ret;
 	struct bm_menu *menu = bm_menu_new(NULL);
+	if (!menu)
+		return gpg_error(GPG_ERR_ASSUAN_SERVER_FAULT);
 	bool b;
 
 	struct bm_item *ok = bm_item_new(buttons.ok);
@@ -163,6 +166,8 @@ static gpg_error_t confirm(assuan_context_t ctx, char *message) {
 
 	gpg_error_t ret;
 	struct bm_menu *menu = bm_menu_new(NULL);
+	if (!menu)
+		return gpg_error(GPG_ERR_ASSUAN_SERVER_FAULT);
 	bool b;
 
 	struct bm_item *ok = bm_item_new(buttons.ok);
@@ -331,7 +336,12 @@ int main(int argc, const char **argv) {
 	(void) argv;
 
 	if (!bm_init())
-		return EXIT_FAILURE;
+		return EXIT_FAILURE_BEMENU;
+
+	struct bm_menu *menu = bm_menu_new(NULL);
+	if (!menu)
+		return EXIT_FAILURE_BEMENU;
+	bm_menu_free(menu);
 
 	reset();
 
