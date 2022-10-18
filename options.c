@@ -24,8 +24,11 @@
 	X("scf", "Scrollbar foreground color", scollbar_foreground_color, BM_COLOR_SCROLLBAR_FG) \
 
 static int debug;
-#if HAVE_BEMENU_SET_BOTTOM
+#if HAVE_BEMENU_SET_BOTTOM || HAVE_BEMENU_SET_ALIGN
 static int bottom;
+#endif
+#if HAVE_BEMENU_SET_ALIGN
+static int center;
 #endif
 static int no_overlap;
 static int monitor;
@@ -41,8 +44,11 @@ COLORS
 
 static struct poptOption optionsTable[] = {
 	{ "debug", '\0', POPT_ARG_NONE, &debug, 0, NULL, NULL },
-#if HAVE_BEMENU_SET_BOTTOM
+#if HAVE_BEMENU_SET_BOTTOM || HAVE_BEMENU_SET_ALIGN
 	{ "bottom", 'b', POPT_ARG_NONE, &bottom, 0, NULL, NULL },
+#endif
+#if HAVE_BEMENU_SET_ALIGN
+	{ "center", 'c', POPT_ARG_NONE, &center, 0, NULL, NULL },
 #endif
 	{ "no-overlap", 'n', POPT_ARG_NONE, &no_overlap, 0, NULL, NULL },
 	{ "monitor", 'm', POPT_ARG_INT, &monitor, 0, "Monitor", NULL },
@@ -119,6 +125,12 @@ void apply_options(struct bm_menu *menu) {
 
 #if HAVE_BEMENU_SET_BOTTOM
 	bm_menu_set_bottom(menu, bottom);
+#endif
+#if HAVE_BEMENU_SET_ALIGN
+	enum bm_align align = BM_ALIGN_TOP;
+	if (bottom) align = BM_ALIGN_BOTTOM;
+	if (center) align = BM_ALIGN_CENTER;
+	bm_menu_set_align(menu, align);
 #endif
 	bm_menu_set_panel_overlap(menu, !no_overlap);
 	bm_menu_set_monitor(menu, monitor);
