@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 #include <popt.h>
 
@@ -26,7 +27,7 @@
 static int debug;
 static int bottom;
 static int no_overlap;
-static int monitor;
+static char *monitor;
 static int height;
 static char *font;
 static char *display;
@@ -41,7 +42,7 @@ static struct poptOption optionsTable[] = {
 	{ "debug", '\0', POPT_ARG_NONE, &debug, 0, NULL, NULL },
 	{ "bottom", 'b', POPT_ARG_NONE, &bottom, 0, NULL, NULL },
 	{ "no-overlap", 'n', POPT_ARG_NONE, &no_overlap, 0, NULL, NULL },
-	{ "monitor", 'm', POPT_ARG_INT, &monitor, 0, "Monitor", NULL },
+	{ "monitor", 'm', POPT_ARG_STRING, &monitor, 0, "Index of the monitor to use, or \"focused\" or \"all\"", NULL },
 	{ "line-height", 'H', POPT_ARG_INT, &height, 0, "Height for each menu line", NULL },
 	{ "fn", '\0', POPT_ARG_STRING, &font, 0, "Font", NULL },
 	{ "display", 'D', POPT_ARG_STRING, &display, 0, "Set the X display", NULL },
@@ -110,6 +111,25 @@ void apply_global_options() {
 	}
 }
 
+static int get_monitor_idx(const char *monitor) {
+	if (!monitor) {
+		return -1;
+	}
+
+	char *end;
+	long idx = strtol(monitor, &end, 10);
+	if (end && (*end == '\0')) {
+		return (int)idx;
+	}
+
+	if (strcmp("all", monitor) == 0) {
+		return -2;
+	}
+
+	// for "focused" and invalid input, fall back to default behavior
+	return -1;
+}
+
 void apply_options(struct bm_menu *menu) {
 	assert(menu);
 
@@ -117,7 +137,7 @@ void apply_options(struct bm_menu *menu) {
 	bm_menu_set_bottom(menu, bottom);
 #endif
 	bm_menu_set_panel_overlap(menu, !no_overlap);
-	bm_menu_set_monitor(menu, monitor);
+	bm_menu_set_monitor(menu, get_monitor_idx(monitor));
 	bm_menu_set_line_height(menu, height);
 	bm_menu_set_font(menu, font);
 	if (ignore_case) {
