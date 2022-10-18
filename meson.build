@@ -26,6 +26,7 @@ have_bemenu_set_bottom = compiler.has_function(
 conf_data = configuration_data()
 
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
+conf_data.set10('HAVE_BEMENU_SET_BOTTOM', have_bemenu_set_bottom)
 
 configure_file(configuration: conf_data, output : 'config.h')
 

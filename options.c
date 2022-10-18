@@ -24,7 +24,9 @@
 	X("scf", "Scrollbar foreground color", scollbar_foreground_color, BM_COLOR_SCROLLBAR_FG) \
 
 static int debug;
+#if HAVE_BEMENU_SET_BOTTOM
 static int bottom;
+#endif
 static int no_overlap;
 static int monitor;
 static int height;
@@ -39,7 +41,9 @@ COLORS
 
 static struct poptOption optionsTable[] = {
 	{ "debug", '\0', POPT_ARG_NONE, &debug, 0, NULL, NULL },
+#if HAVE_BEMENU_SET_BOTTOM
 	{ "bottom", 'b', POPT_ARG_NONE, &bottom, 0, NULL, NULL },
+#endif
 	{ "no-overlap", 'n', POPT_ARG_NONE, &no_overlap, 0, NULL, NULL },
 	{ "monitor", 'm', POPT_ARG_INT, &monitor, 0, "Monitor", NULL },
 	{ "line-height", 'H', POPT_ARG_INT, &height, 0, "Height for each menu line", NULL },
