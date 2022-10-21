@@ -23,9 +23,17 @@ have_bemenu_set_bottom = compiler.has_function(
   dependencies : [ bemenu ],
 )
 
+have_bemenu_set_align = compiler.has_function(
+  'bm_menu_set_align',
+  prefix : '#include <bemenu.h>',
+  dependencies : [ bemenu ],
+)
+
 conf_data = configuration_data()
 
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
+conf_data.set10('HAVE_BEMENU_SET_BOTTOM', have_bemenu_set_bottom)
+conf_data.set10('HAVE_BEMENU_SET_ALIGN', have_bemenu_set_align)
 
 configure_file(configuration: conf_data, output : 'config.h')
 
