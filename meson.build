@@ -12,7 +12,7 @@ version_h = vcs_tag(
 
 compiler = meson.get_compiler('c')
 
-bemenu = dependency('bemenu', version : '>= 0.6.5')
+bemenu = dependency('bemenu', version : '>= 0.6.10')
 assuan = dependency('libassuan')
 gpg_error = dependency('gpg-error')
 popt = dependency('popt')
