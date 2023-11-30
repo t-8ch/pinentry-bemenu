@@ -15,12 +15,18 @@
 	X("tf", "Title foreground color", title_foreground_color, BM_COLOR_TITLE_FG) \
 	X("fb", "Filter background color", filter_background_color, BM_COLOR_FILTER_BG) \
 	X("ff", "Filter foreground color", filter_foreground_color, BM_COLOR_FILTER_FG) \
+	X("cb", "Cursor background. color", cursor_background_color, BM_COLOR_CURSOR_BG) \
+	X("cf", "Cursor foreground color", cursor_foreground_color, BM_COLOR_CURSOR_FG) \
 	X("nb", "Normal background color", normal_background_color, BM_COLOR_ITEM_BG) \
 	X("nf", "Normal foreground color", normal_foreground_color, BM_COLOR_ITEM_FG) \
 	X("hb", "Highlighted background color", highlighted_background_color, BM_COLOR_HIGHLIGHTED_BG) \
 	X("hf", "Highlighted foreground color", highlighted_foreground_color, BM_COLOR_HIGHLIGHTED_FG) \
+	X("fbb", "Feedback background color", feedback_background_color, BM_COLOR_SELECTED_BG) \
+	X("fbf", "Feedback foreground color", feedback_foreground_color, BM_COLOR_SELECTED_FG) \
 	X("sb", "Selected background color", selected_background_color, BM_COLOR_SELECTED_BG) \
 	X("sf", "Selected foreground color", selected_foreground_color, BM_COLOR_SELECTED_FG) \
+	X("ab", "Alternating background. color", alternating_background_color, BM_COLOR_ALTERNATE_BG) \
+	X("af", "Alternating foreground color", alternating_foreground_color, BM_COLOR_ALTERNATE_FG) \
 	X("scb", "Scrollbar background color", scollbar_background_color, BM_COLOR_SCROLLBAR_BG) \
 	X("scf", "Scrollbar foreground color", scollbar_foreground_color, BM_COLOR_SCROLLBAR_FG) \
 
