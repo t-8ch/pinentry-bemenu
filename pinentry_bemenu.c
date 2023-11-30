@@ -16,7 +16,7 @@
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 #define EXIT_FAILURE_BEMENU 13
 
-static char *prompt, *desc;
+static char *prompt, *desc, *title;
 
 static struct {
 	char *ok;
@@ -50,17 +50,24 @@ static gpg_error_t set_not_ok(assuan_context_t ctx, char *message) {
 
 static char *make_title(void) {
 
-	if (!desc && !prompt)
-		return NULL;
+	char *p;
+	int r;
 
-	if (!desc)
+	if (title && desc && prompt)
+		r = asprintf(&p, "%s: %s | %s", title, desc, prompt);
+	else if (title && desc)
+		r = asprintf(&p, "%s: %s", title, desc);
+	else if (title && prompt)
+		r = asprintf(&p, "%s: %s", title, prompt);
+	else if (desc && prompt)
+		r = asprintf(&p, "%s | %s", desc, prompt);
+	else if (title)
+		return strdup(title);
+	else if (desc)
+		return strdup(desc);
+	else if (prompt)
 		return strdup(prompt);
 
-	if (!prompt)
-		return strdup(desc);
-
-	char *p;
-	int r = asprintf(&p, "%s | %s", desc, prompt);
 	if (r == -1)
 		return NULL;
 
@@ -260,6 +267,15 @@ static gpg_error_t set_desc(assuan_context_t ctx, char *message) {
 	return GPG_ERR_NO_ERROR;
 }
 
+static gpg_error_t set_title(assuan_context_t ctx, char *message) {
+	(void) ctx;
+
+	free(title);
+	unescape_inplace(message);
+	title = strdup(message);
+	return GPG_ERR_NO_ERROR;
+}
+
 static gpg_error_t option_handler (assuan_context_t ctx, const char *name, const char *value) {
 	(void) ctx;
 	(void) value;
@@ -292,6 +308,7 @@ static struct {
 	{"SETPROMPT", &set_prompt},
 	{"GETPIN", &get_pin},
 	{"SETDESC", &set_desc},
+	{"SETTITLE", &set_title},
 	{"GETINFO", &get_info},
 	{"MESSAGE", &message},
 	{"CONFIRM", &confirm},
@@ -315,6 +332,9 @@ static void reset(void) {
 
 	free(prompt);
 	prompt = NULL;
+
+	free(title);
+	title = NULL;
 }
 
 static gpg_error_t reset_notify(assuan_context_t ctx, char *message) {
