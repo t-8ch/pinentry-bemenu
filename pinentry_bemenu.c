@@ -68,7 +68,7 @@ static char *make_title(void) {
 	else if (prompt)
 		return strdup(prompt);
 
-	if (r == -1)
+	if (r == -1 || (!title && !desc && !prompt))
 		return NULL;
 
 	return p;
