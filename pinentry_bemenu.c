@@ -87,7 +87,6 @@ static struct bm_item *run_menu(struct bm_menu *menu) {
 	title = make_title();
 	bm_menu_set_title(menu, title);
 	free(title);
-	bm_menu_set_password(menu, true);
 
 	uint32_t unicode;
 	enum bm_key key;

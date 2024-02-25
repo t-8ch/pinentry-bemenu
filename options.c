@@ -39,6 +39,9 @@ static int center;
 #endif
 static int no_overlap;
 static char *monitor;
+#ifdef HAVE_BEMENU_PASSWORD_INDICATOR
+static char *password;
+#endif
 static int height;
 static char *font;
 static char *display;
@@ -59,6 +62,9 @@ static struct poptOption optionsTable[] = {
 #endif
 	{ "no-overlap", 'n', POPT_ARG_NONE, &no_overlap, 0, NULL, NULL },
 	{ "monitor", 'm', POPT_ARG_STRING, &monitor, 0, "Index of the monitor to use, or \"focused\" or \"all\"", NULL },
+#ifdef HAVE_BEMENU_PASSWORD_INDICATOR
+	{ "password", 'x', POPT_ARG_STRING, &password, 0, "Handling of input characters: \"none\", or \"hide\" or \"indicator\"", NULL },
+#endif
 	{ "line-height", 'H', POPT_ARG_INT, &height, 0, "Height for each menu line", NULL },
 	{ "fn", '\0', POPT_ARG_STRING, &font, 0, "Font", NULL },
 	{ "display", 'D', POPT_ARG_STRING, &display, 0, "Set the X display", NULL },
@@ -160,6 +166,18 @@ void apply_options(struct bm_menu *menu) {
 #endif
 	bm_menu_set_panel_overlap(menu, !no_overlap);
 	bm_menu_set_monitor(menu, get_monitor_idx(monitor));
+#ifdef HAVE_BEMENU_PASSWORD_INDICATOR
+	if (!password || !strcmp(password, "hide"))
+		bm_menu_set_password(menu, BM_PASSWORD_HIDE);
+	else if (!strcmp(password, "none"))
+		bm_menu_set_password(menu, BM_PASSWORD_NONE);
+	else if (!strcmp(password, "indicator"))
+		bm_menu_set_password(menu, BM_PASSWORD_INDICATOR);
+	else
+		bm_menu_set_password(menu, BM_PASSWORD_HIDE);
+#else
+	bm_menu_set_password(menu, true);
+#endif
 	bm_menu_set_line_height(menu, height);
 	bm_menu_set_font(menu, font);
 	if (ignore_case) {
