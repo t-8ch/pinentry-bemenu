@@ -29,11 +29,22 @@ have_bemenu_set_align = compiler.has_function(
   dependencies : [ bemenu ],
 )
 
+bemenu_password_indicator_code = '''#include<bemenu.h>
+int main(void) {
+  return BM_PASSWORD_INDICATOR;
+}
+'''
+have_bemenu_password_indicator = compiler.compiles(
+  bemenu_password_indicator_code,
+  name : 'BM_PASSWORD_INDICATOR'
+)
+
 conf_data = configuration_data()
 
 conf_data.set_quoted('PROJECT_NAME', meson.project_name())
 conf_data.set10('HAVE_BEMENU_SET_BOTTOM', have_bemenu_set_bottom)
 conf_data.set10('HAVE_BEMENU_SET_ALIGN', have_bemenu_set_align)
+conf_data.set10('HAVE_BEMENU_PASSWORD_INDICATOR', have_bemenu_password_indicator)
 
 configure_file(configuration: conf_data, output : 'config.h')
 

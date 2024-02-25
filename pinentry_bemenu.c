@@ -87,7 +87,11 @@ static struct bm_item *run_menu(struct bm_menu *menu) {
 	title = make_title();
 	bm_menu_set_title(menu, title);
 	free(title);
+#ifdef HAVE_BEMENU_PASSWORD_INDICATOR
+	bm_menu_set_password(menu, BM_PASSWORD_INDICATOR);
+#else
 	bm_menu_set_password(menu, true);
+#endif
 
 	uint32_t unicode;
 	enum bm_key key;
