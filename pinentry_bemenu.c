@@ -203,7 +203,6 @@ static gpg_error_t confirm(assuan_context_t ctx, char *message) {
 	} else if (selected == cancel) {
 		ret = gpg_error(GPG_ERR_ASS_CANCELED);
 	} else {
-		bm_item_free(selected);
 		ret = gpg_error(GPG_ERR_ASS_CANCELED);
 	}
 
