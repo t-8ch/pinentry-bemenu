@@ -305,16 +305,16 @@ static struct {
 	const char *command;
 	assuan_handler_t handler;
 } commands[] = {
-	{"SETPROMPT", &set_prompt},
-	{"GETPIN", &get_pin},
-	{"SETDESC", &set_desc},
-	{"SETTITLE", &set_title},
-	{"GETINFO", &get_info},
-	{"MESSAGE", &message},
-	{"CONFIRM", &confirm},
-	{"SETOK", &set_ok},
-	{"SETCANCEL", &set_cancel},
-	{"SETNOTOK", &set_not_ok},
+	{"SETPROMPT", set_prompt},
+	{"GETPIN", get_pin},
+	{"SETDESC", set_desc},
+	{"SETTITLE", set_title},
+	{"GETINFO", get_info},
+	{"MESSAGE", message},
+	{"CONFIRM", confirm},
+	{"SETOK", set_ok},
+	{"SETCANCEL", set_cancel},
+	{"SETNOTOK", set_not_ok},
 };
 
 static void reset(void) {
